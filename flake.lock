@@ -34,27 +34,10 @@
         "type": "github"
       }
     },
-    "nixpkgs-safetensors_0-6-2": {
-      "locked": {
-        "lastModified": 1754662446,
-        "narHash": "sha256-3QGVoIIrcnK4QMP7XG/zE7Y5OeZrbyepflryloQx+4E=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "6238ed3a0f8e3fcca4d3b8ba52afaae14c99cfa9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "6238ed3a0f8e3fcca4d3b8ba52afaae14c99cfa9",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-safetensors_0-6-2": "nixpkgs-safetensors_0-6-2"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {

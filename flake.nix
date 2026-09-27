@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-safetensors_0-6-2.url = "github:NixOS/nixpkgs/6238ed3a0f8e3fcca4d3b8ba52afaae14c99cfa9";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -12,7 +11,6 @@
       self,
       flake-utils,
       nixpkgs,
-      nixpkgs-safetensors_0-6-2,
     }:
     flake-utils.lib.eachSystem [ "x86_64-linux" ] (
       system:
@@ -20,9 +18,21 @@
         pkgs = import nixpkgs {
           inherit system;
         };
-        pkgs_safetensors_0-6-2 = import nixpkgs-safetensors_0-6-2 {
-          inherit system;
-        };
+        safetensors-0_6_2 = pkgs.python3Packages.safetensors.overrideAttrs (old: rec {
+          version = "0.6.2";
+          src = pkgs.fetchFromGitHub {
+            owner = "huggingface";
+            repo = "safetensors";
+            tag = "v${version}";
+            hash = "sha256-IyKk29jMAbYW+16mrpqQWjnsmNFEvUwkB048AAx/Cvw=";
+          };
+          cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+            inherit src;
+            sourceRoot = "${src.name}/bindings/python";
+            hash = "sha256-+92fCILZwk/TknGXgR9lRN55WnmkgUJfCszFthstzXs=";
+          };
+          postPatch = "";
+        });
       in
       {
         packages.default = pkgs.rustPlatform.buildRustPackage {
@@ -46,8 +56,8 @@
             python3 = pkgs.python3.withPackages (ps: [
               ps.numpy
               ps.torch
-              pkgs_safetensors_0-6-2.python3Packages.safetensors
-              #               ps.safetensors
+              ps.packaging
+              safetensors-0_6_2
             ]);
           in
           pkgs.writeShellApplication {
